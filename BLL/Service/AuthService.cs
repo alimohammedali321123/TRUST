@@ -63,15 +63,6 @@ namespace BLL.Services
                     Message = GetErrors(result)
                 };
             }
-            var addrole= await userManager.AddToRoleAsync(existemailuser, "Guest");
-            if (!addrole.Succeeded)
-            {
-                return new ServiceResult
-                {
-                    Success = false,
-                    Message = GetErrors(addrole)
-                };
-            }
             await SendVerificationCode(
                 reg.Email,
                 "تأكيد التسجيل",
@@ -83,59 +74,6 @@ namespace BLL.Services
                 Message = "تم تسجيل الحساب بنجاح وفى انتظار تأكيد الايميل."
             };
         }
-
-        public async Task<ServiceResult> ResendEmailCode(string email)
-        {
-            if (string.IsNullOrEmpty(email))
-            {
-                return new ServiceResult
-                {
-                    Success = false,
-                    Message = "يجب إدخال البريد الإلكتروني."
-                };
-            }
-
-            var existuser = await userManager.FindByEmailAsync(email);
-
-            if (existuser == null || existuser.IsDeleted)
-            {
-                return new ServiceResult
-                {
-                    Success = false,
-                    Message = "المستخدم غير موجود."
-                };
-            }
-
-            if (existuser.EmailConfirmed)
-            {
-                return new ServiceResult
-                {
-                    Success = false,
-                    Message = "تم تأكيد البريد الإلكتروني بالفعل."
-                };
-            }
-
-            var sent = await SendVerificationCode(
-                email,
-                "تأكيد التسجيل",
-                "رمز التحقق الخاص بك هو: ");
-
-            if (!sent)
-            {
-                return new ServiceResult
-                {
-                    Success = false,
-                    Message = "من فضلك انتظر دقيقة قبل طلب كود جديد."
-                };
-            }
-
-            return new ServiceResult
-            {
-                Success = true,
-                Message = "تم إرسال رمز التحقق إلى البريد الإلكتروني."
-            };
-        }
-
         public async Task<ServiceResult> Verify(Verify verify)
         {
             var existuser = await userManager.FindByEmailAsync(verify.Email);
@@ -176,6 +114,15 @@ namespace BLL.Services
             db.Set<AccountVerification>().Remove(verificationcode);
 
             await db.SaveChangesAsync();
+            var addrole = await userManager.AddToRoleAsync(existuser, "Guest");
+            if (!addrole.Succeeded)
+            {
+                return new ServiceResult
+                {
+                    Success = false,
+                    Message = GetErrors(addrole)
+                };
+            }
 
             return new ServiceResult
             {
