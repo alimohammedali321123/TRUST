@@ -38,15 +38,19 @@ builder.Services.AddAuthentication().AddGoogle(options =>
     options.ClientId = google["ClientId"]!;
     options.ClientSecret = google["ClientSecret"]!;
 });
-builder.Services.AddRateLimiter(limt =>
+builder.Services.AddRateLimiter(limiter =>
 {
-    limt.AddFixedWindowLimiter("limit", options =>
-    {
-        options.PermitLimit = 5;
-        options.Window = TimeSpan.FromMinutes(20);
-        options.QueueLimit = 0;
-    });
-    limt.OnRejected = async (context, token) =>
+    limiter.AddPolicy("limit", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(20),
+                QueueLimit = 0
+            }));
+
+    limiter.OnRejected = async (context, token) =>
     {
         context.HttpContext.Response.StatusCode = 429;
         context.HttpContext.Response.ContentType = "text/plain; charset=utf-8";
