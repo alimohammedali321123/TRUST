@@ -63,7 +63,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("All");
-app.UseRateLimiter();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
