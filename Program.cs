@@ -38,25 +38,6 @@ builder.Services.AddAuthentication().AddGoogle(options =>
     options.ClientId = google["ClientId"]!;
     options.ClientSecret = google["ClientSecret"]!;
 });
-builder.Services.AddRateLimiter(limiter =>
-{
-    limiter.AddPolicy("limit", httpContext =>
-        RateLimitPartition.GetFixedWindowLimiter(
-            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-            _ => new FixedWindowRateLimiterOptions
-            {
-                PermitLimit = 5,
-                Window = TimeSpan.FromMinutes(20),
-                QueueLimit = 0
-            }));
-
-    limiter.OnRejected = async (context, token) =>
-    {
-        context.HttpContext.Response.StatusCode = 429;
-        context.HttpContext.Response.ContentType = "text/plain; charset=utf-8";
-        await context.HttpContext.Response.WriteAsync("كثير من المحاولات حاول مجددا فى وقت لاحق", token);
-    };
-});
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("All", policy =>
