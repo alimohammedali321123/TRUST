@@ -13,8 +13,8 @@ namespace BLL.Repositories
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            var mail = "axyvorn.trast@gmail.com";
-            var pass = "ticbhwunibxhhtpq";
+            var mail = "axyvo@gmail.com";
+            var pass = "";
             var client = new SmtpClient("smtp.gmail.com", 587)
             {
                 EnableSsl=true,
