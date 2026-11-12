@@ -677,23 +677,6 @@ namespace BLL.Services
 
             return (verificationcode, null);
         }
-
-        private static void DeletePhoto(string folder, string photo)
-        {
-            if (string.IsNullOrEmpty(photo))
-                return;
-
-            var path = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "wwwroot",
-                "Images",
-                folder,
-                photo);
-
-            if (System.IO.File.Exists(path))
-                System.IO.File.Delete(path);
-        }
-
         private static string GetErrors(IdentityResult result)
         {
             return string.Join(" | ", result.Errors.Select(e => e.Description));
