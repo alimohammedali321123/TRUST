@@ -20,7 +20,6 @@ namespace Teaching_Platform.Controllers
 
 
         [HttpPost("Registeration")]
-        [EnableRateLimiting("limit")]
         public async Task<IActionResult> Registeration(Registeration reg)
         {
             var result = await service.Registeration(reg);
@@ -35,7 +34,6 @@ namespace Teaching_Platform.Controllers
             return Ok(result.Message);
         }
         [HttpPost("Verify")]
-        [EnableRateLimiting("limit")]
         public async Task<IActionResult> Verify(Verify verify)
         {
             var result = await service.Verify(verify);
@@ -50,7 +48,6 @@ namespace Teaching_Platform.Controllers
             return Ok(result.Message);
         }
         [HttpPost("LogIn")]
-        [EnableRateLimiting("limit")]
         public async Task<IActionResult> LogIn(LogIn logIn)
         {
             var result = await service.LogIn(logIn);
@@ -70,7 +67,6 @@ namespace Teaching_Platform.Controllers
             });
         }
         [HttpPost("GoogleLogin")]
-        [EnableRateLimiting("limit")]
         public async Task<IActionResult> GoogleLogin(GoogleLogin dto)
         {
             var result = await service.GoogleLogin(dto);
@@ -90,7 +86,6 @@ namespace Teaching_Platform.Controllers
             });
         }
         [HttpPost("ForgetPassword")]
-        [EnableRateLimiting("limit")]
         public async Task<IActionResult> ForgetPassword(string email)
         {
             var result = await service.ForgetPassword(email);
@@ -106,7 +101,6 @@ namespace Teaching_Platform.Controllers
 
 
         [HttpPost("VerifyForgetPassword")]
-        [EnableRateLimiting("limit")]
         public async Task<IActionResult> VerifyForgetPassword(Verify verify)
         {
             var result = await service.VerifyForgetPassword(verify);
@@ -124,7 +118,6 @@ namespace Teaching_Platform.Controllers
 
 
         [HttpPost("ResetForgottenPassword")]
-        [EnableRateLimiting("limit")]
         public async Task<IActionResult> ResetForgottenPassword(ForgetPassword rp)
         {
             var result = await service.ResetForgottenPassword(rp);
@@ -142,7 +135,6 @@ namespace Teaching_Platform.Controllers
 
 
         [HttpPost("RequestChangePassword")]
-        [EnableRateLimiting("limit")]
         public async Task<IActionResult> RequestChangePassword()
         {
             var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -168,7 +160,6 @@ namespace Teaching_Platform.Controllers
 
 
         [HttpPost("VerifyChangePassword")]
-        [EnableRateLimiting("limit")]
         public async Task<IActionResult> VerifyChangePassword(Verify verify)
         {
             var result = await service.VerifyChangePassword(verify);
@@ -186,7 +177,6 @@ namespace Teaching_Platform.Controllers
 
 
         [HttpPost("ChangePassword")]
-        [EnableRateLimiting("limit")]
         public async Task<IActionResult> ChangePassword(ResetPassword cp)
         {
             var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
